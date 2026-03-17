@@ -1,7 +1,7 @@
 package com.example.todoapp.controller;
 
 import com.example.todoapp.model.Task;
-import com.example.todoapp.repository.TaskRepository;
+import com.example.todoapp.service.TaskService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,24 +11,24 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class TaskController {
 
-    private final TaskRepository taskRepository;
+    private final TaskService taskService;
 
-    public TaskController(TaskRepository taskRepository) {
-        this.taskRepository = taskRepository;
+    public TaskController(TaskService taskService) {
+        this.taskService = taskService;
     }
 
     @GetMapping
     public List<Task> getTasks() {
-        return taskRepository.findAll();
+        return taskService.getAllTasks();
     }
 
     @PostMapping
-    public Task addTask(@RequestBody Task task) {
-        return taskRepository.save(task);
+    public Task addTask(@RequestBody Task task) throws Exception {
+        return taskService.addTask(task);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public void deleteTask(@PathVariable Long id) {
-        taskRepository.deleteById(id);
+        taskService.deleteTask(id);
     }
 }
